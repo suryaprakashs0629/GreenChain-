@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREEN CHAIN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+
+    <style>
+        /* ================== General & Common Styles ================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff, #e6ffe6);
+            color: #333;
+            line-height: 1.6;
+            transition: background 0.5s ease-in-out;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: rgba(46, 139, 87, 0.9);
+            color: white;
+            padding: 20px 40px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        /* ================== Login Page Styles with Animation ================== */
+        #login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(46, 139, 87, 0.7), rgba(40, 167, 69, 0.7));
+            z-index: 1;
+        }
+
+        /* Crop animation container */
+        .crop-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        /* ===== CSS FOR FLOATING WORDS UPDATED ===== */
+        .crop {
+            position: absolute;
+            bottom: -100px;
+            animation: float-up linear infinite;
+            color: rgba(253, 3, 3, 0.955); /* Made text semi-transparent white */
+            font-weight: 500;
+            user-select: none; /* Prevents text from being selected */
+        }
+
+        .crop:nth-child(1) { left: 10%; animation-duration: 25s; font-size: 1.8rem; }
+        .crop:nth-child(2) { left: 20%; animation-duration: 20s; font-size: 2.5rem; }
+        .crop:nth-child(3) { left: 35%; animation-duration: 30s; font-size: 1.5rem; }
+        .crop:nth-child(4) { left: 45%; animation-duration: 18s; font-size: 3rem; }
+        .crop:nth-child(5) { left: 60%; animation-duration: 22s; font-size: 2.2rem; }
+        .crop:nth-child(6) { left: 75%; animation-duration: 28s; font-size: 2.7rem; }
+        .crop:nth-child(7) { left: 85%; animation-duration: 24s; font-size: 1.6rem; }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 350px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #2E8B57;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .login-box button:hover {
+            background: #218838;
+        }
+
+        .login-box a {
+            display: block;
+            margin-top: 15px;
+            color: #2E8B57;
+            text-decoration: none;
+        }
+
+        /* ================== Landing Page Styles ================== */
+        #main-app {
+            display: none;
+        }
+
+        #hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            /* Static background for hero section */
+            background: url('https://source.unsplash.com/1600x900/?green,nature') no-repeat center center/cover;
+        }
+        
+        #hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .hero h2:hover {
+            transform: scale(1.05);
+        }
+
+        .hero p {
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+        
+        /* ================== AgriTrace Demo Styles ================== */
+        :root {
+            --agri-green: #2e7d32;
+            --agri-muted: #6b7280;
+            --agri-card: #ffffff;
+            --agri-bg: #f3fbf6;
+        }
+        
+        #agritrace-demo {
+            display: none; /* Initially hidden */
+            padding: 20px;
+            background: var(--agri-bg);
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
+        }
+
+        #agritrace-demo.fade-in {
+            opacity: 1;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 18px 80px;
+        }
+
+        section.card {
+            background: var(--agri-card);
+            border: 1px solid #e6eef0;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 20px rgba(12,50,20,0.03);
+        }
+
+        .card h2 {
+            color: var(--agri-green);
+            margin: 0 0 12px 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 700;
+            color: #24323a;
+        }
+
+        input[type=text], input[type=date], input[type=number], textarea, select, input[type=password], input[type=email] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d6e6df;
+            margin-top: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .actions {
+            margin-top: 14px;
+        }
+
+        button.cta {
+            background: var(--agri-green);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        button.back-btn {
+            background: transparent;
+            color: #2E8B57;
+            border: 1px solid #2E8B57;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        button.ghost {
+            background: transparent;
+            border: 1px solid #cfe8d7;
+            color: var(--agri-green);
+            padding: 9px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .muted {
+            color: var(--agri-muted);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .qr-wrap {
+            width: 240px;
+            height: 240px;
+            border-radius: 10px;
+            border: 2px dashed rgba(46,125,50,0.16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fbfffb;
+        }
+
+        #qr {
+            width: 200px;
+            height: 200px;
+        }
+
+        .info {
+            margin-top: 14px;
+        }
+
+        .info div {
+            margin-bottom: 6px;
+        }
+
+        pre {
+            background: #fbfbfb;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #eef6ef;
+            overflow: auto;
+        }
+
+        .small-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: #eaf6ee;
+            color: #0b6a2e;
+            font-weight: 700;
+        }
+
+        .two-col {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .fullwidth {
+            width: 100%;
+        }
+
+        .sidebar {
+            min-width: 260px;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 900px) {
+            .two-col {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <div class="crop-background">
+            <div class="crop">Wheat</div>
+            <div class="crop">Corn</div>
+            <div class="crop">Rice</div>
+            <div class="crop">Tomato</div>
+            <div class="crop">Carrot</div>
+            <div class="crop">Soybean</div>
+            <div class="crop">Lettuce</div>
+            <div class="crop">Ragi</div>
+            <div class="crop">Apple</div>
+            <div class="crop">Sugarcane</div>
+        </div>
+        <div class="login-box">
+            <h2>Sign In</h2>
+            <form onsubmit="return handleLogin(event)">
+                <input type="email" id="email" placeholder="Enter Email" required>
+                <input type="password" id="password" placeholder="Enter Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <a href="#">Forgot Password?</a>
+        </div>
+    </div>
+    
+    <div id="main-app">
+        <header>
+            <h1>GREEN CHAIN</h1>
+            <nav>
+                <a href="#" onclick="goBackFromApp()">Home</a>
+                <a href="#" onclick="showAgriTrace()">App</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </nav>
+        </header>
+
+        <section class="hero" id="hero-section">
+            <div class="hero-content">
+                <h2 onclick="showAgriTrace()">Welcome to Green Chain</h2>
+                <p>Modern design, clean layout, fully customizable</p>
+            </div>
+        </section>
+
+        <div id="agritrace-demo">
+            <main>
+                <button class="back-btn" onclick="goBackFromApp()">&larr; Go Back to Home</button>
+                
+                <section id="farmer" class="card">
+                    <h2>Farmer — Submit Crop Details</h2>
+                    <div class="two-col">
+                        <div class="fullwidth">
+                            <label>Farmer Name</label>
+                            <input id="farmerName" type="text" placeholder="e.g., Raju Kumar">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Crop Name</label>
+                                    <input id="cropName" type="text" placeholder="e.g., Tomato">
+                                </div>
+                                <div class="col">
+                                    <label>Variety</label>
+                                    <input id="variety" type="text" placeholder="e.g., Roma">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Quantity (kg)</label>
+                                    <input id="quantity" type="number" min="0" value="100">
+                                </div>
+                                <div class="col">
+                                    <label>Price (₹ / kg)</label>
+                                    <input id="price" type="number" min="0" value="0">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Date of Harvest</label>
+                                    <input id="harvestDate" type="date">
+                                </div>
+                                <div class="col">
+                                    <label>Location (village, district)</label>
+                                    <input id="location" type="text" placeholder="e.g., Village X, District Y">
+                                </div>
+                            </div>
+                            <label>Optional certificate / photo</label>
+                            <input id="fileInput" type="file" accept="image/*">
+                            <div class="actions">
+                                <button class="cta" id="submitRecordBtn">Submit & Generate QR</button>
+                                <button class="ghost" id="clearAllBtn" title="Clear demo data">Clear Demo Data</button>
+                            </div>
+                            <div class="muted">This demo stores data in localStorage and simulates writing a hash to a blockchain (for proof-of-concept).</div>
+                        </div>
+                    </div>
+                </section>
+    
+                <section id="stake" class="card">
+                    <h2>Stakeholder / Shopkeeper — Approve & Add Margin</h2>
+                    <div class="two-col">
+                        <div class="fullwidth">
+                            <label>Enter Record ID (or scan QR) to fetch farmer record</label>
+                            <input id="stakeInput" type="text" placeholder="Paste record id or QR payload" />
+                            <div style="margin-top:8px">
+                                <button class="cta" id="stakeFetchBtn">Fetch Record</button>
+                                <button class="ghost" id="startStakeScanner">Scan QR (camera)</button>
+                            </div>
+                            <div id="stakeFetched" style="margin-top:12px;display:none">
+                                <h3 style="margin:6px 0">Fetched Record</h3>
+                                <pre id="stakeRecordPreview">—</pre>
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Role</label>
+                                        <select id="stakeRole"><option value="stakeholder">Stakeholder</option><option value="shopkeeper">Shopkeeper</option></select>
+                                    </div>
+                                    <div class="col">
+                                        <label>Margin to add (₹ per kg)</label>
+                                        <input id="stakeMargin" type="number" value="0" />
+                                    </div>
+                                </div>
+                                <div style="margin-top:10px">
+                                    <button class="cta" id="applyStakeBtn">Approve & Add to Chain</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar">
+                            <h3 style="margin-top:0">Scanner</h3>
+                            <div id="stakeScanner" style="width:100%;height:180px;background:#fbfbfb;border-radius:8px;border:1px dashed #e6efe8;display:flex;align-items:center;justify-content:center">
+                                <div style="text-align:center;color:var(--agri-muted)">Camera area</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    
+                <section id="shop" class="card">
+                    <h2>Shopkeeper — Purchase & Add Transaction</h2>
+                    <label>Enter Record ID</label>
+                    <input id="shopInput" type="text" placeholder="e.g., rec-1634234234-abc" />
+                    <div style="margin-top:8px">
+                        <button class="cta" id="shopFetchBtn">Fetch</button>
+                        <button class="ghost" id="startShopScanner">Scan QR (camera)</button>
+                    </div>
+                    <div id="shopFetched" style="margin-top:12px;display:none">
+                        <pre id="shopRecordPreview">—</pre>
+                        <div class="row">
+                            <div class="col">
+                                <label>Purchase price (₹ / kg)</label>
+                                <input id="purchasePrice" type="number" value="0">
+                            </div>
+                            <div class="col">
+                                <label>Quantity purchased (kg)</label>
+                                <input id="purchaseQty" type="number" value="0">
+                            </div>
+                        </div>
+                        <div style="margin-top:10px"><button class="cta" id="applyShopBtn">Record Purchase (Add block)</button></div>
+                    </div>
+                </section>
+    
+                <section id="customer" class="card">
+                    <h2>Customer — Scan / View Full Chain</h2>
+                    <div class="two-col">
+                        <div class="fullwidth">
+                            <label>Paste QR payload or enter record ID</label>
+                            <input id="customerInput" type="text" placeholder='Paste {"recordPointer":"rec-...","hash":"..."} OR paste rec-...'>
+                            <div style="margin-top:8px">
+                                <button class="cta" id="customerFetchBtn">View Record</button>
+                                <button class="ghost" id="startCustomerScanner">Scan QR (camera)</button>
+                            </div>
+                            <div style="margin-top:12px">
+                                <h3>Record Overview</h3>
+                                <div class="row">
+                                    <div style="flex:1">
+                                        <div class="qr-wrap" style="width:200px;height:200px">
+                                            <div id="qr"></div>
+                                        </div>
+                                    </div>
+                                    <div style="flex:2">
+                                        <div class="info">
+                                            <div><b>Record ID:</b> <span id="out-record-id">—</span></div>
+                                            <div><b>Farmer:</b> <span id="out-farmer">—</span></div>
+                                            <div><b>Crop:</b> <span id="out-crop">—</span></div>
+                                            <div><b>Location:</b> <span id="out-location">—</span></div>
+                                            <div style="margin-top:8px">Status: <span id="verificationBadge" class="small-badge">Not verified</span></div>
+                                            <div style="margin-top:10px"><button class="cta" id="downloadQrBtn">Download QR</button></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h3 style="margin-top:12px">Full Chain (Timeline)</h3>
+                                <div id="chainList" style="border-radius:8px;padding:12px;background:#fbfbfb;border:1px solid #eef6ef;max-height:280px;overflow:auto">
+                                    No chain loaded.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar" style="min-width:260px">
+                            <h3 style="margin-top:0">Scanner area</h3>
+                            <div id="customerScanner" style="width:100%;height:200px;background:#fbfbfb;border-radius:8px;border:1px dashed #e6efe8;display:flex;align-items:center;justify-content:center">
+                                <div style="text-align:center;color:var(--agri-muted)">Camera area</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+        <footer>
+            <p>© 2025 GREEN CHAIN | Designed with ❤</p>
+        </footer>
+    </div>
+    
+    <script>
+        // The main container for the app
+        const mainApp = document.getElementById('main-app');
+        // The landing page inside the app
+        const heroSection = document.getElementById('hero-section');
+        // The AgriTrace demo section inside the app
+        const demoSection = document.getElementById('agritrace-demo');
+
+        // Initially hide the main app content
+        mainApp.style.display = 'none';
+
+        // Login logic
+        function handleLogin(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('email').value;
+            const passwordInput = document.getElementById('password').value;
+
+            // A simple validation: check if email is valid and password is not empty
+            if (emailInput.includes('@') && passwordInput) {
+                // Hide the login page
+                document.getElementById('login-page').style.display = 'none';
+                
+                // Show the main app container with the hero section
+                mainApp.style.display = 'block';
+                heroSection.style.display = 'flex';
+                demoSection.style.display = 'none';
+                
+            } else {
+                alert('Please enter a valid email and password.');
+            }
+        }
+
+        // Show AgriTrace demo page with animation
+        function showAgriTrace() {
+            heroSection.style.display = 'none';
+            demoSection.style.display = 'block';
+            setTimeout(() => {
+                demoSection.classList.add('fade-in');
+            }, 10);
+        }
+
+        // GO BACK TO HERO SECTION
+        function goBackFromApp() {
+            demoSection.classList.remove('fade-in');
+            setTimeout(() => {
+                demoSection.style.display = 'none';
+                heroSection.style.display = 'flex';
+            }, 800);
+        }
+
+
+        /*
+            AgriTrace — front-end prototype with simulated blockchain stored in localStorage.
+            Data structures:
+              - records: stored under key 'agri_records' as { recordId: recordObj }
+              - chain: stored under key 'agri_chain' as array of blocks [{index, timestamp, recordId, action, data, prevHash, hash}]
+              - QR payload: { recordPointer: recordId, hash: contentHash }
+        */
+
+        /* ---------- Utilities ---------- */
+        function uid(prefix = 'rec') {
+            return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+        }
+        async function sha256Hex(str) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+            return hex;
+        }
+        function loadRecords() { return JSON.parse(localStorage.getItem('agri_records') || '{}'); }
+        function saveRecords(obj) { localStorage.setItem('agri_records', JSON.stringify(obj)); }
+        function loadChain() { return JSON.parse(localStorage.getItem('agri_chain') || '[]'); }
+        function saveChain(arr) { localStorage.setItem('agri_chain', JSON.stringify(arr)); }
+
+        /* ---------- Blockchain helpers ---------- */
+        async function pushBlock(recordId, action, data) {
+            const chain = loadChain();
+            const prevHash = chain.length ? chain[chain.length - 1].hash : '0'.repeat(64);
+            const timestamp = new Date().toISOString();
+            const raw = prevHash + recordId + action + JSON.stringify(data) + timestamp;
+            const hash = await sha256Hex(raw);
+            const block = { index: chain.length, timestamp, recordId, action, data, prevHash, hash };
+            chain.push(block);
+            saveChain(chain);
+            return block;
+        }
+        function getChainForRecord(recordId) {
+            return loadChain().filter(b => b.recordId === recordId);
+        }
+
+        /* ---------- QR helpers ---------- */
+        function renderQR(text) {
+            document.getElementById('qr').innerHTML = '';
+            new QRCode(document.getElementById('qr'), { text, width: 200, height: 200 });
+        }
+        function downloadQR() {
+            const canvas = document.querySelector('#qr canvas');
+            if (!canvas) { alert('No QR generated'); return; }
+            const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'agri-record-qr.png'; a.click();
+        }
+
+        /* ---------- Farmer flow ---------- */
+        document.getElementById('submitRecordBtn').addEventListener('click', async () => {
+            const farmerName = document.getElementById('farmerName').value.trim();
+            const cropName = document.getElementById('cropName').value.trim();
+            const variety = document.getElementById('variety').value.trim();
+            const quantity = Number(document.getElementById('quantity').value) || 0;
+            const price = Number(document.getElementById('price').value) || 0;
+            const harvestDate = document.getElementById('harvestDate').value || new Date().toISOString().slice(0, 10);
+            const location = document.getElementById('location').value.trim() || 'Unknown';
+
+            if (!farmerName || !cropName) { alert('Please enter farmer and crop name'); return; }
+
+            let fileData = null;
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files && fileInput.files[0]) {
+                fileData = await new Promise(res => {
+                    const r = new FileReader();
+                    r.onload = e => res(e.target.result);
+                    r.readAsDataURL(fileInput.files[0]);
+                });
+            }
+
+            const recordId = uid('rec');
+            const record = {
+                id: recordId, farmerName, cropName, variety, quantity, price, harvestDate, location,
+                file: fileData, createdAt: new Date().toISOString()
+            };
+
+            const contentHash = await sha256Hex(JSON.stringify(record));
+            record.contentHash = contentHash;
+
+            const records = loadRecords();
+            records[recordId] = record;
+            saveRecords(records);
+
+            await pushBlock(recordId, 'created', { farmerName, cropName, quantity, price, harvestDate, location, contentHash });
+
+            const payload = { recordPointer: recordId, hash: contentHash };
+            renderQR(JSON.stringify(payload));
+
+            showRecordOnCustomer(recordId);
+            alert('Record created: ' + recordId + '\nQR generated below.');
+        });
+
+        /* ---------- Show record in Customer area (REFINED) ---------- */
+        async function showRecordOnCustomer(recordId) {
+            const records = loadRecords();
+            const rec = records[recordId];
+
+            if (!rec) {
+                alert('Record not found for ID: ' + recordId);
+                return;
+            }
+
+            // Update the UI elements with data from the fetched record
+            document.getElementById('out-record-id').textContent = rec.id || 'N/A';
+            document.getElementById('out-farmer').textContent = rec.farmerName || 'N/A';
+            document.getElementById('out-crop').textContent = (rec.cropName || 'N/A') + (rec.variety ? ' (' + rec.variety + ')' : '');
+            document.getElementById('out-location').textContent = rec.location || 'N/A';
+
+            // Generate and render the QR code for this specific record's payload
+            const payload = { recordPointer: rec.id, hash: rec.contentHash };
+            renderQR(JSON.stringify(payload));
+
+            // Render the full chain
+            const chainFor = getChainForRecord(recordId);
+            const listEl = document.getElementById('chainList');
+            if (chainFor.length === 0) {
+                listEl.innerHTML = '<div class="muted">No chain entries</div>';
+            } else {
+                listEl.innerHTML = chainFor.map(b => {
+                    const when = new Date(b.timestamp).toLocaleString();
+                    return `<div style="padding:10px;border-radius:8px;border-bottom:1px dashed #eef6ef;margin-bottom:8px">
+                            <div style="font-weight:700">${b.action.toUpperCase()}</div>
+                            <div style="color:var(--agri-muted);font-size:13px">${when}</div>
+                            <div style="margin-top:6px"><pre style="background:transparent;padding:0;margin:0">${JSON.stringify(b.data, null, 2)}</pre></div>
+                        </div>`;
+                }).join('');
+            }
+
+            // Simple verification check
+            const lastBlock = loadChain().slice(-1)[0];
+            const verified = lastBlock && lastBlock.recordId === rec.id && lastBlock.data && (lastBlock.data.contentHash === rec.contentHash || lastBlock.action === 'created');
+            const badge = document.getElementById('verificationBadge');
+            if (verified) {
+                badge.textContent = 'Verified (simulated)';
+                badge.style.background = '#eaf6ee';
+                badge.style.color = '#0b6a2e';
+            } else {
+                badge.textContent = 'Not verified';
+                badge.style.background = '';
+                badge.style.color = '';
+            }
+        }
+
+        /* ---------- Stakeholder flow (REVISED) ---------- */
+        let stakeScanner = null;
+
+        document.getElementById('startStakeScanner').addEventListener('click', async () => {
+            const el = document.getElementById('stakeScanner');
+            el.innerHTML = '';
+            if (stakeScanner) {
+                await stakeScanner.stop();
+                stakeScanner = null;
+                el.innerHTML = '<div style="text-align:center;color:var(--agri-muted)">Camera area</div>';
+                return;
+            }
+            stakeScanner = new Html5Qrcode('stakeScanner');
+            stakeScanner.start({ facingMode: "environment" }, { fps: 8, qrbox: 250 },
+                async (msg) => { // on success
+                    await handleScan(msg, 'stakeInput', 'stakeFetched', 'stakeRecordPreview', stakeScanner);
+                },
+                (err) => { /* ignore minor errors */ }
+            ).catch(err => {
+                alert('Cannot start camera: ' + err);
+            });
+        });
+
+        document.getElementById('stakeFetchBtn').addEventListener('click', () => handleManualFetch('stakeInput', 'stakeFetched', 'stakeRecordPreview'));
+
+        document.getElementById('applyStakeBtn').addEventListener('click', async () => {
+            const text = document.getElementById('stakeInput').value.trim();
+            let recId = parseRecordId(text);
+            const records = loadRecords();
+            const rec = records[recId];
+            if (!rec) { alert('Record not found.'); return; }
+
+            const role = document.getElementById('stakeRole').value;
+            const margin = Number(document.getElementById('stakeMargin').value) || 0;
+            const timestamp = new Date().toISOString();
+
+            if (role === 'stakeholder') {
+                rec.stakeholder = { approvedAt: timestamp, marginPerKg: margin, note: 'Stakeholder approved' };
+            } else {
+                rec.shopkeeper = rec.shopkeeper || {};
+                rec.shopkeeper.recordedAt = timestamp;
+                rec.shopkeeper.marginPerKg = margin;
+                rec.shopkeeper.note = 'Shopkeeper recorded';
+            }
+
+            records[recId] = rec;
+            saveRecords(records);
+
+            await pushBlock(recId, role === 'stakeholder' ? 'stakeholder_approved' : 'shopkeeper_recorded', { marginPerKg: margin, actor: role, timestamp });
+
+            document.getElementById('stakeRecordPreview').textContent = JSON.stringify(rec, null, 2);
+            alert('Updated and added to chain.');
+        });
+
+        /* ---------- Shopkeeper flow (REVISED) ---------- */
+        let shopScanner = null;
+
+        document.getElementById('startShopScanner').addEventListener('click', async () => {
+            const targetId = 'shopScannerWrapper';
+            const wrapper = document.createElement('div');
+            wrapper.id = targetId;
+            wrapper.style.position = 'fixed';
+            wrapper.style.top = '50%';
+            wrapper.style.left = '50%';
+            wrapper.style.transform = 'translate(-50%, -50%)';
+            wrapper.style.zIndex = '9999';
+            wrapper.style.width = '300px';
+            wrapper.style.height = '300px';
+            wrapper.style.background = '#fff';
+            wrapper.style.border = '1px solid #ccc';
+            wrapper.style.borderRadius = '10px';
+            document.body.appendChild(wrapper);
+
+            shopScanner = new Html5Qrcode(targetId);
+            shopScanner.start({ facingMode: "environment" }, { fps: 8, qrbox: 250 },
+                async (msg) => {
+                    await handleScan(msg, 'shopInput', 'shopFetched', 'shopRecordPreview', shopScanner);
+                    wrapper.remove();
+                    shopScanner = null;
+                },
+                (err) => { /* ignore */ }
+            ).catch(e => {
+                alert('Camera failed: ' + e);
+                wrapper.remove();
+            });
+        });
+
+        document.getElementById('shopFetchBtn').addEventListener('click', () => handleManualFetch('shopInput', 'shopFetched', 'shopRecordPreview'));
+
+        document.getElementById('applyShopBtn').addEventListener('click', async () => {
+            const text = document.getElementById('shopInput').value.trim();
+            let recId = parseRecordId(text);
+            const records = loadRecords();
+            const rec = records[recId];
+            if (!rec) { alert('Record not found.'); return; }
+
+            const pPrice = Number(document.getElementById('purchasePrice').value) || 0;
+            const pQty = Number(document.getElementById('purchaseQty').value) || 0;
+            rec.shopkeeper = rec.shopkeeper || {};
+            rec.shopkeeper.purchase = { pricePerKg: pPrice, qty: pQty, at: new Date().toISOString() };
+            records[recId] = rec;
+            saveRecords(records);
+
+            await pushBlock(recId, 'shopkeeper_purchase', { pricePerKg: pPrice, qty: pQty });
+            document.getElementById('shopRecordPreview').textContent = JSON.stringify(rec, null, 2);
+            alert('Purchase recorded and pushed to chain.');
+        });
+
+        /* ---------- Customer flow (REVISED) ---------- */
+        let customerScanner = null;
+
+        document.getElementById('startCustomerScanner').addEventListener('click', async () => {
+            const container = document.getElementById('customerScanner');
+            container.innerHTML = '';
+            if (customerScanner) {
+                await customerScanner.stop();
+                customerScanner = null;
+                container.innerHTML = '<div style="text-align:center;color:var(--agri-muted)">Camera area</div>';
+                return;
+            }
+            customerScanner = new Html5Qrcode('customerScanner');
+            customerScanner.start({ facingMode: "environment" }, { fps: 8, qrbox: 250 },
+                async (msg) => { // on success
+                    await handleScan(msg, 'customerInput', null, null, customerScanner, true);
+                },
+                (err) => { /* ignore minor errors */ }
+            ).catch(err => {
+                alert('Cannot start camera: ' + err);
+            });
+        });
+
+        document.getElementById('customerFetchBtn').addEventListener('click', () => handleManualFetch('customerInput'));
+
+        /* ---------- Helper Functions for REVISED flows ---------- */
+        function parseRecordId(text) {
+            try {
+                const obj = JSON.parse(text);
+                return obj.recordPointer || text;
+            } catch (e) {
+                return text;
+            }
+        }
+
+        async function handleScan(msg, inputId, fetchedId, previewId, scanner, isCustomer = false) {
+            const recId = parseRecordId(msg);
+            document.getElementById(inputId).value = msg;
+
+            if (isCustomer) {
+                await showRecordOnCustomer(recId);
+            } else {
+                const records = loadRecords();
+                if (!records[recId]) {
+                    alert('Record not found.');
+                    await scanner.stop().catch(() => {});
+                    return;
+                }
+                document.getElementById(fetchedId).style.display = 'block';
+                document.getElementById(previewId).textContent = JSON.stringify(records[recId], null, 2);
+            }
+
+            await scanner.stop().catch(() => {});
+        }
+
+        async function handleManualFetch(inputId, fetchedId, previewId) {
+            const text = document.getElementById(inputId).value.trim();
+            if (!text) {
+                alert('Please enter a record ID or paste QR payload.');
+                return;
+            }
+            const recId = parseRecordId(text);
+            const records = loadRecords();
+            if (!records[recId]) {
+                alert('Record not found.');
+                return;
+            }
+
+            if (inputId === 'customerInput') {
+                await showRecordOnCustomer(recId);
+            } else {
+                document.getElementById(fetchedId).style.display = 'block';
+                document.getElementById(previewId).textContent = JSON.stringify(records[recId], null, 2);
+            }
+        }
+
+        /* ---------- Download QR ---------- */
+        document.getElementById('downloadQrBtn').addEventListener('click', downloadQR);
+
+        /* ---------- Clear demo data ---------- */
+        document.getElementById('clearAllBtn').addEventListener('click', () => {
+            if (!confirm('Clear all demo data (records + chain)?')) return;
+            localStorage.removeItem('agri_records');
+            localStorage.removeItem('agri_chain');
+            alert('Cleared demo data.');
+            // clear UI
+            document.getElementById('out-record-id').textContent = '—';
+            document.getElementById('out-farmer').textContent = '—';
+            document.getElementById('out-crop').textContent = '—';
+            document.getElementById('out-location').textContent = '—';
+            document.getElementById('chainList').innerHTML = 'No chain loaded.';
+            document.getElementById('qr').innerHTML = '';
+            if (document.getElementById('stakeFetched')) { document.getElementById('stakeFetched').style.display = 'none'; }
+            if (document.getElementById('shopFetched')) { document.getElementById('shopFetched').style.display = 'none'; }
+        });
+    </script>
+</body>
+</html>
