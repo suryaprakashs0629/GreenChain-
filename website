@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREEN CHAIN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --dark-green: #2d5a31;
+            --primary-green: #4CAF50;
+            --accent-orange: #FF9800;
+            --light-beige: #FBFBF8;
+            --card-bg: #FFFFFF;
+            --text-color: #333333;
+            --border-color: #E0E0E0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--light-beige); color: var(--text-color); line-height: 1.6; }
+
+        #emoji-background { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; overflow: hidden; z-index: -1; }
+        .emoji { position: absolute; bottom: -50px; font-size: 2rem; opacity: 0; animation: floatUp 20s linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(0); } 10%, 90% { opacity: 0.15; } 100% { transform: translateY(-110vh); opacity: 0; } }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background-color: var(--card-bg); box-shadow: 0 2px 8px var(--shadow-color); position: sticky; top: 0; z-index: 1000; }
+        .navbar .logo { font-size: 1.8rem; font-weight: 700; color: var(--dark-green); text-decoration: none; }
+        .navbar .nav-links a { color: #555; text-decoration: none; margin: 0 15px; font-weight: 500; }
+        .navbar .nav-links a:hover { color: var(--primary-green); }
+        
+        .page { padding: 40px; max-width: 1000px; margin: 0 auto; }
+        .page h2 { font-size: 2.5rem; color: var(--dark-green); margin-bottom: 20px; border-bottom: 3px solid var(--primary-green); padding-bottom: 10px; }
+        
+        /* --- NEW HOME PAGE STYLES --- */
+        #home-page .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, rgba(232, 245, 233, 0.5), rgba(200, 230, 201, 0.5));
+            border-radius: 20px;
+        }
+        .hero h1 { font-size: 3.5rem; color: var(--dark-green); }
+        .hero p { font-size: 1.2rem; color: #666; margin: 20px 0 40px 0; }
+        
+        .features-section { text-align: center; padding: 80px 20px; }
+        .features-section h2 { border: none; font-size: 2.2rem; margin-bottom: 40px; }
+        .features-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .feature-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            width: 280px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+        .feature-card .icon { font-size: 3rem; color: var(--primary-green); }
+        .feature-card h3 { font-size: 1.4rem; color: var(--dark-green); margin: 15px 0 10px 0; }
+
+        /* --- NEW ABOUT PAGE STYLES --- */
+        #about-page .content-section { margin-bottom: 40px; }
+        #about-page .content-section h3 { font-size: 1.8rem; color: var(--dark-green); margin-bottom: 15px; }
+        
+        button { cursor: pointer; border-radius: 8px; border: none; padding: 12px 24px; font-size: 1rem; font-weight: 500; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; }
+        button.cta { background: var(--accent-orange); color: white; }
+
+        /* --- Rest of the styles are unchanged --- */
+        .page-container { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; background-color: transparent; padding: 20px; }
+        .selection-box { background: var(--card-bg); padding: 40px; border-radius: 16px; box-shadow: 0 8px 24px var(--shadow-color); border: 1px solid var(--border-color); width: 100%; max-width: 480px; text-align: center; }
+        .role-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .role-buttons button { padding: 20px 15px; background: var(--primary-green); color: white; }
+        #main-app header { background: var(--dark-green); color: white; padding: 20px 40px; text-align: center; }
+        section.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 25px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 12px var(--shadow-color); }
+        .card h2 { color: var(--dark-green); margin-bottom: 15px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        label { display: block; margin-top: 15px; font-weight: 700; color: #555; }
+        input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; background-color: #fcfcfc; }
+        .record-details { border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-top: 20px; background-color: var(--light-beige); }
+        .qr-wrap { width: 220px; height: 220px; margin: 20px auto; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #fff; padding: 10px; box-shadow: 0 2px 8px var(--shadow-color); }
+        .chain-entry { padding: 15px; border-bottom: 1px solid var(--border-color); }
+    </style>
+</head>
+<body>
+    
+    <div id="emoji-background"></div>
+
+    <div id="website-section">
+        <nav class="navbar">
+            <a href="#" class="logo" onclick="showPage('home-page')">GREEN CHAIN</a>
+            <div class="nav-links">
+                <a href="#" onclick="showPage('home-page')">Home</a>
+                <a href="#" onclick="showPage('about-page')">About</a>
+                <a href="#" onclick="showPage('contact-page')">Contact</a>
+            </div>
+            <button class="cta" onclick="startApp()">Get Started</button>
+        </nav>
+
+        <div id="home-page" class="page">
+            <div class="hero">
+                <h1>Transparent Food, Trusted Journey.</h1>
+                <p>Bringing clarity to the supply chain. Track your food from the farm to your table with the power of modern technology.</p>
+                <button class="cta" onclick="startApp()" style="padding: 15px 30px; font-size: 1.2rem;">Start Tracking Now</button>
+            </div>
+
+            <div class="features-section">
+                <h2>Why Green Chain?</h2>
+                <div class="features-container">
+                    <div class="feature-card">
+                        <div class="icon">🔗</div>
+                        <h3>End-to-End Traceability</h3>
+                        <p>Follow your food's complete journey. Every step, from planting to purchase, is recorded and verifiable.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">✅</div>
+                        <h3>Guaranteed Transparency</h3>
+                        <p>Access an immutable, shared digital ledger. Once data is recorded, it cannot be altered, ensuring total honesty.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🤝</div>
+                        <h3>Build Consumer Trust</h3>
+                        <p>Empower your customers with the ability to instantly verify the authenticity and origin of their products.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about-page" class="page" style="display: none;">
+            <h2>About Green Chain</h2>
+            <div class="content-section">
+                <h3>Our Mission</h3>
+                <p>Our mission is to bring unparalleled transparency to the food supply chain. In a world where consumers increasingly care about the origin and journey of their food, our platform provides a simple yet powerful solution to bridge the information gap between producer and consumer.</p>
+            </div>
+            <div class="content-section">
+                <h3>The Technology</h3>
+                <p>Green Chain is built on the concept of a blockchain—a decentralized, immutable digital ledger. While this project is a simulation, it demonstrates the core principles: each transaction (from the farmer harvesting, to the stakeholder adding a margin) is a "block" of data. Each new block is cryptographically linked to the previous one, creating a secure "chain" of information that is incredibly difficult to tamper with. This ensures that the history of any product is both transparent and trustworthy.</p>
+            </div>
+             <div class="content-section">
+                <h3>Benefits for Everyone</h3>
+                <p><strong>For Farmers:</strong> Gain fair recognition for your products and practices. Create a permanent, verifiable record of your hard work.</p>
+                <p><strong>For Businesses:</strong> Enhance your brand's reputation with proven transparency. Easily manage and verify your supply chain, reducing fraud and error.</p>
+                <p><strong>For Consumers:</strong> Make informed decisions with confidence. Scan a simple QR code to know where your food comes from, ensuring it's safe, authentic, and ethically sourced.</p>
+            </div>
+        </div>
+
+        <div id="contact-page" class="page" style="display: none;">
+             <h2>Contact Us</h2>
+            <div class="contact-info">
+                <p>You can reach out via the following methods:</p>
+                <p><strong>📞 Phone:</strong> +91 7483631905</p>
+                <p><strong>✉️ Email:</strong> <a href="mailto:suryaprakash.s0629@gmail.com">suryaprakash.s0629@gmail.com</a></p>
+            </div>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border-color);">
+            <h3>Or Send a Message</h3>
+            <form onsubmit="event.preventDefault(); alert('Message sent (demo)!');">
+                <label for="contact-name">Name</label>
+                <input type="text" id="contact-name" placeholder="Your Name">
+                <label for="contact-email">Email</label>
+                <input type="email" id="contact-email" placeholder="Your Email">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" rows="5" placeholder="Your message here..."></textarea>
+                <button type="submit" class="cta" style="margin-top: 20px;">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="role-selection-page" class="page-container" style="display: none;">
+        <div class="selection-box">
+            <h2>Select Your Role</h2>
+            <div class="role-buttons">
+                <button onclick="selectRole('farmer')">🧑‍🌾 Farmer</button>
+                <button onclick="selectRole('stakeholder')">🚚 Stakeholder</button>
+                <button onclick="selectRole('shopkeeper')">🏪 Shopkeeper</button>
+                <button onclick="selectRole('customer')">🛒 Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-page" class="page-container" style="display: none;">
+        <div class="selection-box login-box">
+            <h2 id="login-title">Sign In</h2>
+            <form onsubmit="return handleLogin(event)">
+                <input type="email" id="email" placeholder="Enter Email" required>
+                <input type="password" id="password" placeholder="Enter Password" required>
+                <button type="submit" class="cta" style="width: 100%; margin-top: 10px;">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="main-app" style="display: none;">
+        <header><h1>GREEN CHAIN DASHBOARD</h1></header>
+        <div id="agritrace-demo">
+            <main>
+                <button class="logout-btn" onclick="logout()">🚪 Logout & Return to Home</button>
+                <section id="farmer" class="card"></section>
+                <section id="stakeholder" class="card"></section>
+                <section id="shopkeeper" class="card"></section>
+                <section id="customer" class="card"></section>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // --- Page Navigation and Role Management ---
+        const websiteSection = document.getElementById('website-section');
+        const roleSelectionPage = document.getElementById('role-selection-page');
+        const loginPage = document.getElementById('login-page');
+        const mainApp = document.getElementById('main-app');
+        let selectedRole = '';
+
+        function showPage(pageId) {
+            document.querySelectorAll('#website-section .page').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        function startApp() {
+            websiteSection.style.display = 'none';
+            roleSelectionPage.style.display = 'flex';
+        }
+
+        function selectRole(role) {
+            selectedRole = role.toLowerCase();
+            const roleText = {farmer: "Farmer", stakeholder: "Stakeholder", shopkeeper: "Shopkeeper", customer: "Customer"}[selectedRole];
+            document.getElementById('login-title').textContent = `Sign In as ${roleText}`;
+            roleSelectionPage.style.display = 'none';
+            loginPage.style.display = 'flex';
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            if (email) {
+                loginPage.style.display = 'none';
+                mainApp.style.display = 'block';
+                showDashboardForRole();
+            } else {
+                alert('Please enter a valid email.');
+            }
+        }
+
+        function showDashboardForRole() {
+            ['farmer', 'stakeholder', 'shopkeeper', 'customer'].forEach(roleId => document.getElementById(roleId).style.display = 'none');
+            const farmerQR = document.getElementById('farmerQrCodeDisplay');
+            if (farmerQR) farmerQR.style.display = 'none';
+            if (selectedRole) document.getElementById(selectedRole).style.display = 'block';
+        }
+
+        function logout() {
+            mainApp.style.display = 'none';
+            websiteSection.style.display = 'block';
+            showPage('home-page');
+            selectedRole = '';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function createEmojiBackground() {
+            const container = document.getElementById('emoji-background');
+            if (!container) return;
+            const emojis = ['🍅', '🥕', '🌽', '🥬', '🌾', '🍓', '🍆', '🥦'];
+            const count = 30;
+            for (let i = 0; i < count; i++) {
+                const emoji = document.createElement('span');
+                emoji.classList.add('emoji');
+                emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = `${Math.random() * 100}vw`;
+                emoji.style.animationDuration = `${Math.random() * 15 + 10}s`;
+                emoji.style.animationDelay = `${Math.random() * 10}s`;
+                container.appendChild(emoji);
+            }
+        }
+        createEmojiBackground();
+
+        // --- Core Blockchain & Data Utilities ---
+        // (Functionality is unchanged from the previous working version)
+        function uid(p = 'rec') { return `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`; }
+        async function sha256(str) { const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join(''); }
+        function loadDb(key) { return JSON.parse(localStorage.getItem(key) || '{}'); }
+        function saveDb(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+        
+        async function pushBlock(recordId, action, data) {
+            const chain = JSON.parse(localStorage.getItem('chain') || '[]');
+            const prevHash = chain.length ? chain[chain.length - 1].hash : '0'.repeat(64);
+            const block = { index: chain.length, timestamp: new Date().toISOString(), recordId, action, data, prevHash };
+            block.hash = await sha256(`${block.prevHash}${block.recordId}${block.action}${JSON.stringify(block.data)}${block.timestamp}`);
+            chain.push(block);
+            localStorage.setItem('chain', JSON.stringify(chain));
+        }
+
+        function renderQR(text, elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.innerHTML = '';
+            new QRCode(el, { text, width: 200, height: 200 });
+        }
+        function downloadQR(selector) {
+            const canvas = document.querySelector(`${selector} canvas`);
+            if (!canvas) { alert('No QR generated'); return; }
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL('image/png');
+            a.download = 'green-chain-qr.png';
+            a.click();
+        }
+
+        function displayRecordDetails(record, elementId) {
+            const container = document.getElementById(elementId);
+            if (!record) { container.innerHTML = `<p>Record not found.</p>`; return; }
+            container.innerHTML = `
+                <p><strong>Record ID:</strong> ${record.id}</p>
+                <p><strong>Farmer Name:</strong> ${record.farmerName}</p>
+                <p><strong>Crop:</strong> ${record.cropName} (${record.variety})</p>
+                <p><strong>Initial Quantity:</strong> ${record.quantity} kg</p>
+                <p><strong>Harvest Date:</strong> ${record.harvestDate}</p>
+            `;
+        }
+        
+        // --- This function populates the empty card sections when the app loads ---
+        function populateAppCards() {
+            document.getElementById('farmer').innerHTML = `<h2>🧑‍🌾 Farmer — Submit Crop Details</h2><label>Farmer Name</label><input id="farmerName" type="text" placeholder="e.g., Raju Kumar"><div class="row"><div class="col"><label>Crop Name</label><input id="cropName" type="text" placeholder="e.g., Tomato"></div><div class="col"><label>Variety</label><input id="variety" type="text" placeholder="e.g., Roma"></div></div><div class="row"><div class="col"><label>Quantity (kg)</label><input id="quantity" type="number" min="0" value="100"></div><div class="col"><label>Harvest Date</label><input id="harvestDate" type="date"></div></div><div style="margin-top: 20px;"><button class="cta" id="submitRecordBtn">🌿 Submit & Generate QR</button></div><div id="farmerQrCodeDisplay" style="display:none; margin-top: 25px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 25px;"><h3>Record Created Successfully!</h3><p>Record ID: <strong id="farmerRecordId" style="font-family: monospace; user-select: all; background: #eee; padding: 3px 6px; border-radius: 4px;"></strong></p><div class="qr-wrap"><div id="farmerQrCode"></div></div><button class="cta" id="farmerDownloadQrBtn">📥 Download QR</button></div>`;
+            document.getElementById('stakeholder').innerHTML = `<h2>🚚 Stakeholder — Add Margin</h2><label for="stakeholderInput">Enter Record ID to fetch data</label><input id="stakeholderInput" type="text" placeholder="Paste record ID from farmer" /><div style="margin-top:15px"><button class="fetch-btn" id="stakeholderFetchBtn">🔍 Fetch Record</button></div><div id="stakeholderFetched" style="display:none; margin-top:20px;"><h3>Fetched Record Details:</h3><div id="stakeholderRecordDetails" class="record-details"></div><div class="row" style="margin-top:20px;"><div class="col"><label for="stakeholderMargin">Margin to add (₹ per kg)</label><input id="stakeholderMargin" type="number" value="0" /></div></div><div style="margin-top:15px"><button class="cta" id="applyStakeholderBtn">🔗 Add Margin to Chain</button></div></div>`;
+            document.getElementById('shopkeeper').innerHTML = `<h2>🏪 Shopkeeper — Log Purchase</h2><label for="shopkeeperInput">Enter Record ID to fetch data</label><input id="shopkeeperInput" type="text" placeholder="Paste record ID" /><div style="margin-top:15px"><button class="fetch-btn" id="shopkeeperFetchBtn">🔍 Fetch Record</button></div><div id="shopkeeperFetched" style="display:none; margin-top:20px;"><h3>Fetched Record Details:</h3><div id="shopkeeperRecordDetails" class="record-details"></div><div class="row" style="margin-top:20px;"><div class="col"><label for="purchasePrice">Purchase price (₹ per kg)</label><input id="purchasePrice" type="number" value="0"></div><div class="col"><label for="purchaseQty">Quantity purchased (kg)</label><input id="purchaseQty" type="number" value="0"></div></div><div style="margin-top:15px"><button class="cta" id="applyShopkeeperBtn">🔗 Add Purchase to Chain</button></div></div>`;
+            document.getElementById('customer').innerHTML = `<h2>🛒 Customer — View Full Product Journey</h2><label for="customerInput">Enter Record ID to view history</label><input id="customerInput" type="text" placeholder='Enter final record ID'><div style="margin-top:15px"><button class="fetch-btn" id="customerFetchBtn">🔍 View Record</button></div><div id="customer-view" style="display: none; margin-top: 25px;"><h3>Initial Record Details:</h3><div id="customerRecordDetails" class="record-details"></div><h3 style="margin-top:25px;">Complete Journey (Timeline):</h3><div id="chainList" style="border-radius:12px; background:#fff; border:1px solid var(--border-color); max-height:400px; overflow:auto; margin-top:15px;"></div></div>`;
+        }
+        populateAppCards();
+
+        // --- Event Listeners ---
+        document.getElementById('submitRecordBtn').addEventListener('click', async () => {
+            const farmerName = document.getElementById('farmerName').value.trim();
+            if (!farmerName) { alert('Please enter Farmer Name.'); return; }
+            const recordId = uid('rec');
+            const record = { id: recordId, farmerName, cropName: document.getElementById('cropName').value.trim(), variety: document.getElementById('variety').value.trim(), quantity: document.getElementById('quantity').value, harvestDate: document.getElementById('harvestDate').value, createdAt: new Date().toISOString() };
+            record.hash = await sha256(JSON.stringify(record));
+            const recordsDb = loadDb('records');
+            recordsDb[recordId] = record;
+            saveDb('records', recordsDb);
+            await pushBlock(recordId, 'FARMER_CREATED', { farmerName: record.farmerName, crop: record.cropName, hash: record.hash });
+            const payload = JSON.stringify({ recordId });
+            document.getElementById('farmerQrCodeDisplay').style.display = 'block';
+            document.getElementById('farmerRecordId').textContent = recordId;
+            renderQR(payload, 'farmerQrCode');
+        });
+        document.getElementById('stakeholderFetchBtn').addEventListener('click', () => {
+            const recId = document.getElementById('stakeholderInput').value.trim();
+            const record = loadDb('records')[recId];
+            if (record) { displayRecordDetails(record, 'stakeholderRecordDetails'); document.getElementById('stakeholderFetched').style.display = 'block'; } else { alert('Record not found!'); }
+        });
+        document.getElementById('applyStakeholderBtn').addEventListener('click', async () => {
+            const recId = document.getElementById('stakeholderInput').value.trim();
+            if (!loadDb('records')[recId]) { alert('Record not found.'); return; }
+            const margin = document.getElementById('stakeholderMargin').value;
+            await pushBlock(recId, 'STAKEHOLDER_MARGIN_ADDED', { marginPerKg: `₹${margin}` });
+            alert(`Margin of ₹${margin} added to the history of record ${recId}.`);
+            document.getElementById('stakeholderFetched').style.display = 'none';
+            document.getElementById('stakeholderInput').value = '';
+        });
+        document.getElementById('shopkeeperFetchBtn').addEventListener('click', () => {
+            const recId = document.getElementById('shopkeeperInput').value.trim();
+            const record = loadDb('records')[recId];
+            if (record) { displayRecordDetails(record, 'shopkeeperRecordDetails'); document.getElementById('shopkeeperFetched').style.display = 'block'; } else { alert('Record not found!'); }
+        });
+        document.getElementById('applyShopkeeperBtn').addEventListener('click', async () => {
+            const recId = document.getElementById('shopkeeperInput').value.trim();
+            if (!loadDb('records')[recId]) { alert('Record not found.'); return; }
+            const price = document.getElementById('purchasePrice').value;
+            const qty = document.getElementById('purchaseQty').value;
+            await pushBlock(recId, 'SHOPKEEPER_PURCHASED', { purchasePrice: `₹${price}/kg`, quantity: `${qty} kg` });
+            alert(`Purchase added to the history of record ${recId}.`);
+            document.getElementById('shopkeeperFetched').style.display = 'none';
+            document.getElementById('shopkeeperInput').value = '';
+        });
+        document.getElementById('customerFetchBtn').addEventListener('click', () => {
+            const recId = document.getElementById('customerInput').value.trim();
+            const record = loadDb('records')[recId];
+            if (!record) { alert('Record not found!'); return; }
+            document.getElementById('customer-view').style.display = 'block';
+            displayRecordDetails(record, 'customerRecordDetails');
+            const chain = JSON.parse(localStorage.getItem('chain') || '[]').filter(b => b.recordId === recId);
+            const listEl = document.getElementById('chainList');
+            if (chain.length === 0) { listEl.innerHTML = `<p>No history found for this record.</p>`; return; }
+            listEl.innerHTML = chain.map(b => `<div class="chain-entry"><p><strong>Action:</strong> ${b.action.replace(/_/g, ' ')}</p><p><strong>Timestamp:</strong> ${new Date(b.timestamp).toLocaleString()}</p><p><strong>Data Added:</strong></p><pre>${JSON.stringify(b.data, null, 2)}</pre></div>`).join('');
+        });
+        document.getElementById('farmerDownloadQrBtn').addEventListener('click', () => downloadQR('#farmerQrCode'));
+    </script>
+</body>
+</html>
